@@ -3,10 +3,11 @@ import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
 
 import i18n from '@/libs/i18n'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import VueMask from 'v-mask'
 import router from './router'
 import store from './store'
 import App from './App.vue'
-
 // Global Components
 import './global-components'
 
@@ -26,7 +27,7 @@ import '@/@fake-db/db'
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
 Vue.use(ModalPlugin)
-
+Vue.use(VueMask)
 // Composition API
 Vue.use(VueCompositionAPI)
 

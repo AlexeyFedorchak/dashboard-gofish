@@ -68,6 +68,11 @@ export default {
         img: require('@/assets/images/flags/pt.png'),
         name: 'Portuguese',
       },
+      {
+        locale: 'uk',
+        img: require('@/assets/images/flags/uk.png'),
+        name: 'Ukraine',
+      },
     ]
     /* eslint-disable global-require */
 
