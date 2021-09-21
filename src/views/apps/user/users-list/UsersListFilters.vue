@@ -22,7 +22,7 @@
             @input="(val) => $emit('update:roleFilter', val)"
           />
         </b-col>
-        <b-col
+        <!-- <b-col
           cols="12"
           md="4"
           class="mb-md-0 mb-2"
@@ -36,7 +36,7 @@
             :reduce="val => val.value"
             @input="(val) => $emit('update:planFilter', val)"
           />
-        </b-col>
+        </b-col> -->
         <b-col
           cols="12"
           md="4"

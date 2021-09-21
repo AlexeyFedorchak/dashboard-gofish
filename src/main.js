@@ -5,6 +5,7 @@ import VueCompositionAPI from '@vue/composition-api'
 import i18n from '@/libs/i18n'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import VueMask from 'v-mask'
+import axios from 'axios'
 import router from './router'
 import store from './store'
 import App from './App.vue'
@@ -12,7 +13,6 @@ import App from './App.vue'
 import './global-components'
 
 // 3rd party plugins
-import '@axios'
 import '@/libs/acl'
 import '@/libs/portal-vue'
 import '@/libs/clipboard'
@@ -31,6 +31,7 @@ Vue.use(VueMask)
 
 // Composition API
 Vue.use(VueCompositionAPI)
+Vue.prototype.axios = axios
 
 // Feather font icon - For form-wizard
 // * Shall remove it if not using font-icons of feather-icons - For form-wizard

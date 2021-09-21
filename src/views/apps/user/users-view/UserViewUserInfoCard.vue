@@ -12,18 +12,18 @@
         <!-- User Avatar & Action Buttons -->
         <div class="d-flex justify-content-start">
           <b-avatar
-            :src="userData.avatar"
-            :text="avatarText(userData.fullName)"
-            :variant="`light-${resolveUserRoleVariant(userData.role)}`"
+            :src="userData.photo_path"
+            :text="avatarText(userData.nick_name)"
+            :variant="`light-${resolveUserRoleVariant(userData.roles[0].name)}`"
             size="104px"
             rounded
           />
           <div class="d-flex flex-column ml-1">
             <div class="mb-1">
               <h4 class="mb-0">
-                {{ userData.fullName }}
+                {{ fullName(userData) }}
               </h4>
-              <span class="card-text">{{ userData.email }}</span>
+              <span class="card-text">{{ userData.phone }}</span>
             </div>
             <div class="d-flex flex-wrap">
               <b-button
@@ -43,7 +43,7 @@
         </div>
 
         <!-- User Stats -->
-        <div class="d-flex align-items-center mt-2">
+        <!-- <div class="d-flex align-items-center mt-2">
           <div class="d-flex align-items-center mr-2">
             <b-avatar
               variant="light-primary"
@@ -79,7 +79,7 @@
               <small>Annual Profit</small>
             </div>
           </div>
-        </div>
+        </div> -->
       </b-col>
 
       <!-- Right Col: Table -->
@@ -97,7 +97,7 @@
               <span class="font-weight-bold">Username</span>
             </th>
             <td class="pb-50">
-              {{ userData.username }}
+              {{ userData.nick_name }}
             </td>
           </tr>
           <tr>
@@ -109,7 +109,7 @@
               <span class="font-weight-bold">Status</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.status }}
+              {{ userData.is_activated ? 'Active' : 'Inactive' }}
             </td>
           </tr>
           <tr>
@@ -121,10 +121,10 @@
               <span class="font-weight-bold">Role</span>
             </th>
             <td class="pb-50 text-capitalize">
-              {{ userData.role }}
+              {{ userData.roles[0].name }}
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <th class="pb-50">
               <feather-icon
                 icon="FlagIcon"
@@ -135,7 +135,7 @@
             <td class="pb-50">
               {{ userData.country }}
             </td>
-          </tr>
+          </tr> -->
           <tr>
             <th>
               <feather-icon
@@ -145,7 +145,7 @@
               <span class="font-weight-bold">Contact</span>
             </th>
             <td>
-              {{ userData.contact }}
+              {{ userData.phone }}
             </td>
           </tr>
         </table>
@@ -177,6 +177,11 @@ export default {
       avatarText,
       resolveUserRoleVariant,
     }
+  },
+  methods: {
+    fullName(user) {
+      return `${user.first_name || ''} ${user.last_name || ''}`.trim()
+    },
   },
 }
 </script>
