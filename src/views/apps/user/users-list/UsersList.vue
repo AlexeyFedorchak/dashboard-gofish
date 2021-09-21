@@ -280,9 +280,7 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
 
-    const fullName = user => {
-      return `${user?.first_name} ${user?.last_name}` || ''
-    },
+    const fullName = user => `${user?.first_name} ${user?.last_name}` || ''
 
     const {
       fetchUsers,
@@ -297,7 +295,6 @@ export default {
       isSortDirDesc,
       refUserListTable,
       refetchData,
-      fullName,
 
       // UI
       resolveUserRoleVariant,
@@ -326,6 +323,7 @@ export default {
       isSortDirDesc,
       refUserListTable,
       refetchData,
+      fullName,
 
       // Filter
       avatarText,
