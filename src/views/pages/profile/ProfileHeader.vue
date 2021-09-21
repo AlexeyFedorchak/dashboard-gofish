@@ -6,7 +6,7 @@
     alt="cover photo"
     body-class="p-0"
   >
-    <!-- profile picture -->
+    <!-- index picture -->
     <div class="position-relative">
       <div class="profile-img-container d-flex align-items-center">
         <div class="profile-img">
@@ -14,10 +14,10 @@
             :src="headerData.avatar"
             rounded
             fluid
-            alt="profile photo"
+            alt="index photo"
           />
         </div>
-        <!-- profile title -->
+        <!-- index title -->
         <div class="profile-title ml-3">
           <h2 class="text-white">
             {{ headerData.username }}
@@ -26,12 +26,12 @@
             {{ headerData.designation }}
           </p>
         </div>
-        <!--/ profile title -->
+        <!--/ index title -->
       </div>
     </div>
-    <!--/ profile picture -->
+    <!--/ index picture -->
 
-    <!-- profile navbar -->
+    <!-- index navbar -->
     <div class="profile-header-nav">
       <b-navbar
         toggleable="md"
@@ -123,7 +123,7 @@
         <!--/ collapse -->
       </b-navbar>
     </div>
-    <!--/ profile navbar -->
+    <!--/ index navbar -->
   </b-card>
 </template>
 

@@ -100,7 +100,6 @@
 import { BRow, BCol } from 'bootstrap-vue'
 
 import { getUserData } from '@/auth/utils'
-import { entityRequests } from '@/service/entityRequest'
 import EcommerceMedal from './EcommerceMedal.vue'
 import EcommerceStatistics from './EcommerceStatistics.vue'
 import EcommerceRevenueReport from './EcommerceRevenueReport.vue'
@@ -136,7 +135,6 @@ export default {
     }
   },
   created() {
-    console.log('component created ')
     // data
     this.$http.get('/ecommerce/data')
       .then(response => {
@@ -149,10 +147,6 @@ export default {
           this.data.congratulations.name = userData.fullName.split(' ')[0] || userData.username
         }
       })
-  },
-  mounted() {
-    entityRequests.auth.me()
-      .then(() => {})
   },
 }
 </script>

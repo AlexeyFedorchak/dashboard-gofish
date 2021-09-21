@@ -28,7 +28,7 @@
           <feather-icon
             icon="StarIcon"
             size="18"
-            :class="data.favorite ? 'profile-favorite':''"
+            :class="data.favorite ? 'index-favorite':''"
           />
         </div>
       </div>

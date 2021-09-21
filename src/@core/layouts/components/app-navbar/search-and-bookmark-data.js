@@ -88,7 +88,7 @@ export default {
       { title: 'Popover', route: { name: 'components-popover' }, icon: 'TagIcon', isBookmarked: false },
       { title: 'Pricing', route: { name: 'pages-pricing' }, icon: 'DollarSignIcon', isBookmarked: false },
       { title: 'Product Details', route: { name: 'apps-e-commerce-product-details', params: { slug: 'apple-watch-series-5-27' } }, icon: 'BoxIcon', isBookmarked: false, },
-      { title: 'Profile', route: { name: 'pages-profile' }, icon: 'UserIcon', isBookmarked: false },
+      { title: 'Profile', route: { name: 'pages-index' }, icon: 'UserIcon', isBookmarked: false },
       { title: 'Progress', route: { name: 'components-progress' }, icon: 'ChevronsRightIcon', isBookmarked: false },
       { title: 'Quill Editor', route: { name: 'extensions-quill-editor' }, icon: 'TypeIcon', isBookmarked: false },
       { title: 'Radio', route: { name: 'forms-element-radio' }, icon: 'DiscIcon', isBookmarked: false },

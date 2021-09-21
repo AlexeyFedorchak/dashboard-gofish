@@ -273,7 +273,6 @@ export default {
           }
           entityRequests.auth.code(formData)
             .then(res => {
-              console.log(res)
               localStorage.setItem('user', JSON.stringify(res))
               setToken(res.access_token)
               openModalCode.value.hide()

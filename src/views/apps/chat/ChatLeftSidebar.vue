@@ -6,7 +6,7 @@
       <user-profile-sidebar
         :shall-show-user-profile-sidebar="shallShowUserProfileSidebar"
         :profile-user-data="profileUserData"
-        @close-sidebar="$emit('update:shall-show-user-profile-sidebar', false)"
+        @close-sidebar="$emit('update:shall-show-user-index-sidebar', false)"
       />
 
       <!-- Sidebar Content -->
@@ -35,7 +35,7 @@
                 variant="transparent"
                 badge
                 badge-variant="success"
-                @click.native="$emit('show-user-profile')"
+                @click.native="$emit('show-user-index')"
               />
             </div>
             <!-- Search -->

@@ -230,7 +230,7 @@ mock.onGet('/apps/chat/chats-and-contacts').reply(() => {
 // ------------------------------------------------
 // GET: Return Single Chat
 // ------------------------------------------------
-mock.onGet('/apps/chat/users/profile-user').reply(() => [200, data.profileUser])
+mock.onGet('/apps/chat/users/index-user').reply(() => [200, data.profileUser])
 
 // ------------------------------------------------
 // GET: Return Single Chat

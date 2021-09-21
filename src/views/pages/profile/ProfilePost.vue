@@ -54,7 +54,7 @@
             <feather-icon
               icon="HeartIcon"
               class="mr-50"
-              :class="data.youLiked ? 'profile-likes':'profile-icon'"
+              :class="data.youLiked ? 'index-likes':'index-icon'"
               size="18"
             />
             <span>{{ kFormatter(data.likes) }}</span>
@@ -122,7 +122,7 @@
                 icon="HeartIcon"
                 size="18"
                 class="mr-25"
-                :class="comment.youLiked ? 'profile-likes' :'profile-icon'"
+                :class="comment.youLiked ? 'index-likes' :'index-icon'"
               />
               <span class="text-muted align-middle">{{ comment.commentsLikes }}</span>
             </b-link>

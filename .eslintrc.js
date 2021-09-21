@@ -12,6 +12,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
 
     semi: ['error', 'never'],
+    'no-shadow': ['error', { allow: ['state'] }],
     'max-len': 'off',
     'linebreak-style': 'off',
     camelcase: ['error', { properties: 'never', ignoreDestructuring: true, ignoreImports: true }],

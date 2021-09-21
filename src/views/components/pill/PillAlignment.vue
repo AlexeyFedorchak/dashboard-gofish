@@ -17,7 +17,7 @@
       </b-tab>
       <b-tab title="Profile">
         <b-card-text>
-          {{ tabData[1]['profile'] }}
+          {{ tabData[1]['index'] }}
         </b-card-text>
       </b-tab>
       <b-tab
@@ -51,7 +51,7 @@
       </b-tab>
       <b-tab title="Profile">
         <b-card-text>
-          {{ tabData[1]['profile'] }}
+          {{ tabData[1]['index'] }}
         </b-card-text>
       </b-tab>
       <b-tab
@@ -83,7 +83,7 @@
       </b-tab>
       <b-tab title="Profile">
         <b-card-text>
-          {{ tabData[1]['profile'] }}
+          {{ tabData[1]['index'] }}
         </b-card-text>
       </b-tab>
       <b-tab

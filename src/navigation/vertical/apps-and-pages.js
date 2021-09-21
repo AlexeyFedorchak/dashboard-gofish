@@ -140,7 +140,7 @@ export default [
   //     },
   //     {
   //       title: 'Profile',
-  //       route: 'pages-profile',
+  //       route: 'pages-index',
   //     },
   //     {
   //       title: 'Faq',

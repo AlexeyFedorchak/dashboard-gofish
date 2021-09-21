@@ -7,21 +7,26 @@
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
         <p class="user-name font-weight-bolder mb-0">
-          {{ userData.user.first_name }}
-          {{ userData.user.last_name }}
+          {{ profile.first_name }}
+          {{ profile.last_name }}
         </p>
-        <span class="user-status">{{ userData.user.roles[0].name }}</span>
+        <span
+          v-if="profile.roles"
+          class="user-status"
+        >
+          {{ profile.roles[0].name }}
+        </span>
       </div>
       <b-avatar
         size="40"
-        :src="userData.avatar"
+        :src="profile.avatar"
         variant="light-primary"
         badge
         class="badge-minimal"
         badge-variant="success"
       >
         <feather-icon
-          v-if="!userData.user.first_name"
+          v-if="!profile.first_name"
           icon="UserIcon"
           size="22"
         />
@@ -29,7 +34,7 @@
     </template>
 
     <b-dropdown-item
-      :to="{ name: 'pages-profile'}"
+      :to="{ name: 'pages-index'}"
       link-class="d-flex align-items-center"
     >
       <feather-icon
@@ -139,13 +144,14 @@ export default {
   data() {
     return {
       userData: {},
+      role: '',
       avatarText,
     }
   },
   computed: {
-    // setUser() {
-    //   return this.userData = JSON.parse(localStorage.getItem('user'))
-    // },
+    profile() {
+      return this.$store.getters['profile/profile']
+    },
   },
   methods: {
     logout() {

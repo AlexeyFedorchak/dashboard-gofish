@@ -106,7 +106,7 @@ export default [
     },
   },
   {
-    path: '/pages/profile',
+    path: '/pages/index',
     name: 'pages-profile',
     component: () => import('@/views/pages/profile/Profile.vue'),
     meta: {

@@ -1,5 +1,5 @@
 // ================================================================================================
-// 	File Name: page-profile.scss
+// 	File Name: page-index.scss
 // 	Description: Page content different types of users page layouts SCSS.
 // 	----------------------------------------------------------------------------------------------
 // 	Item Name: Vuexy  - Vuejs, HTML & Laravel Admin Dashboard Template
@@ -10,20 +10,20 @@
 @import '../bootstrap-extended/include'; // Bootstrap includes
 @import '../components/include'; // Components includes
 
-// User profile Scss
+// User index Scss
 #user-profile {
-  /*-------------profile header section---------*/
+  /*-------------index header section---------*/
   .profile-header {
     overflow: hidden;
 
-    // profile picture container
+    // index picture container
     .profile-img-container {
       position: absolute;
       bottom: -2rem;
       left: 2.14rem;
       z-index: 2;
 
-      // profile image
+      // index image
       .profile-img {
         height: 8.92rem;
         width: 8.92rem;
@@ -34,7 +34,7 @@
       }
     }
 
-    // profile navbar padding
+    // index navbar padding
     .profile-header-nav {
       .navbar {
         padding: 0.8rem 1rem;
@@ -55,9 +55,9 @@
     }
   }
 
-  /*-------- profile info section --------*/
+  /*-------- index info section --------*/
   #profile-info {
-    // profile star icons
+    // index star icons
     .profile-star {
       color: $gray-100;
 
@@ -85,7 +85,7 @@
     }
   }
 
-  //profile-latest-img - hover effect
+  //index-latest-img - hover effect
   .profile-latest-img {
     transition: all 0.2s ease-in-out;
     &:hover {
@@ -126,7 +126,7 @@
   }
 }
 
-// profile img and title
+// index img and title
 @include media-breakpoint-down(xs) {
   #user-profile {
     .profile-header {

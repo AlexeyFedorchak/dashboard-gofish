@@ -318,7 +318,7 @@ export default {
     }
 
     // User Profile Sidebar
-    // ? Will contain all details of profile user (e.g. settings, about etc.)
+    // ? Will contain all details of index user (e.g. settings, about etc.)
     const profileUserData = ref({})
     // ? Will contain id, name and avatar & status
     const profileUserDataMinimal = ref({})

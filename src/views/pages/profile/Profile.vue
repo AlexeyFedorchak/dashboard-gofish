@@ -4,7 +4,7 @@
     id="user-profile"
   >
     <profile-header :header-data="profileData.header" />
-    <!-- profile info  -->
+    <!-- index info  -->
     <section id="profile-info">
       <b-row>
         <!-- about suggested page and twitter feed -->
@@ -53,7 +53,7 @@
         <!--/ load more  -->
       </b-row>
     </section>
-    <!--/ profile info  -->
+    <!--/ index info  -->
   </div>
 </template>
 
@@ -92,7 +92,7 @@ export default {
     }
   },
   created() {
-    this.$http.get('/profile/data').then(res => { this.profileData = res.data })
+    this.$http.get('/index/data').then(res => { this.profileData = res.data })
   },
 }
 /* eslint-disable global-require */

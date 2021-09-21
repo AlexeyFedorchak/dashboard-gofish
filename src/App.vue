@@ -92,6 +92,7 @@ export default {
 
     // Set Window Width in store
     store.commit('app/UPDATE_WINDOW_WIDTH', window.innerWidth)
+    store.dispatch('profile/getProfile')
     const { width: windowWidth } = useWindowSize()
     watch(windowWidth, val => {
       store.commit('app/UPDATE_WINDOW_WIDTH', val)

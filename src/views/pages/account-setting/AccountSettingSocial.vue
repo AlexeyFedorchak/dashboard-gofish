@@ -123,7 +123,7 @@
             </h4>
           </div>
           <b-row class="text-center">
-            <!-- twitter profile -->
+            <!-- twitter index -->
             <b-col
               md="3"
               cols="6"
@@ -145,7 +145,7 @@
                 Disconnect
               </b-link>
             </b-col>
-            <!--/ twitter profile -->
+            <!--/ twitter index -->
 
             <!-- facebook connect button -->
             <b-col
@@ -165,7 +165,7 @@
             </b-col>
             <!--/ facebook connect button -->
 
-            <!-- google profile -->
+            <!-- google index -->
             <b-col
               md="3"
               cols="6"
@@ -187,7 +187,7 @@
                 Disconnect
               </b-link>
             </b-col>
-            <!--/ google profile -->
+            <!--/ google index -->
 
             <!-- github connect -->
             <b-col

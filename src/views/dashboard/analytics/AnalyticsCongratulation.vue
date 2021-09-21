@@ -29,7 +29,7 @@
       Congratulations {{ data.name }},
     </h1>
     <b-card-text class="m-auto w-75">
-      You have done <strong>{{ data.saleToday }}%</strong> more sales today. Check your new badge in your profile.
+      You have done <strong>{{ data.saleToday }}%</strong> more sales today. Check your new badge in your index.
     </b-card-text>
   </b-card>
 </template>

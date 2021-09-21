@@ -243,4 +243,4 @@ const data = {
   },
 }
 /* eslint-disable global-require */
-mock.onGet('/profile/data').reply(() => [200, data.profileData])
+mock.onGet('/index/data').reply(() => [200, data.profileData])

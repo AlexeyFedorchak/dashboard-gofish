@@ -32,7 +32,7 @@ const data = {
       planBenefits: [
         'Unlimited responses',
         'Unlimited forms and surveys',
-        'Instagram profile page',
+        'Instagram index page',
         'Google Docs integration',
         'Custom “Thank you” page',
       ],

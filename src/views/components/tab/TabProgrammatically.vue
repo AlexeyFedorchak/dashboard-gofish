@@ -13,7 +13,7 @@
           Pie powder sweet cotton candy topping pie. Chocolate gummi bears tootsie roll gingerbread. Jujubes pie bonbon chocolate cake dragée macaroon candy.
         </b-card-text>
       </b-tab>
-      <b-tab title="Edit profile">
+      <b-tab title="Edit index">
         <b-card-text>I'm the second tab</b-card-text>
         <b-card class="border mb-0">
           Apple pie jelly sugar plum cupcake biscuit danish cheesecake danish pastry. Cheesecake lemon  pastry marzipan. Wafer bear claw chocolate bar soufflé gummies sugar plum macaroon brownie.
