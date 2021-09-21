@@ -20,7 +20,7 @@
         <div class="d-lg-flex align-items-center justify-content-center px-5 customSizeImage">
           <b-img
             fluid
-            :src="imgUrl"
+            :src="sideImg"
             alt="Register V2"
           />
         </div>
@@ -48,7 +48,7 @@
           <!-- form -->
           <validation-observer
             ref="registerForm"
-            #default="{invalid}"
+            #default="{ invalid }"
           >
             <b-form
               class="auth-register-form mt-2"
@@ -186,19 +186,21 @@
     </b-row>
     <b-modal
       id="modal-login"
+      ref="openModalCode"
       cancel-variant="outline-secondary"
       ok-title="Login"
       cancel-title="Close"
       centered
+      no-close-on-backdrop
+      no-close-on-esc
       title="Insert code"
-      :visible="openModalInsertCode"
-      @ok="checkIfCodeCorrect"
+      @ok.prevent="checkIfCodeCorrect"
     >
       <!-- form -->
       <validation-observer
         ref="registerCode"
       >
-<!--        #default="{invalid}"-->
+        <!-- #default="{ invalid }"-->
         <b-form>
           <b-form-group
             label="Code"
@@ -206,7 +208,7 @@
           >
             <validation-provider
               #default="{ errors }"
-              name="code"
+              name="register-code"
               vid="code"
               rules="required"
             >
@@ -237,9 +239,14 @@ import {
 } from 'bootstrap-vue'
 import { required, min } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
-import store from '@/store/index'
+// eslint-disable-next-line no-unused-vars
 import axios from '@axios'
 import inputRules from '@/mixins/inputRules'
+import { ref, computed } from '@vue/composition-api'
+import { useToast } from 'vue-toastification/composition'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import router from '@/router'
+import { entityRequests } from '@/service/entityRequest'
 
 export default {
   components: {
@@ -265,90 +272,110 @@ export default {
     ValidationObserver,
   },
   mixins: [togglePasswordVisibility, inputRules],
-
-  data() {
+  setup(props, context) {
+    const formData = ref({
+      first_name: '',
+      phone: null,
+      last_name: '',
+      nick_name: '',
+    })
+    const errorsRegistrations = ref(null)
+    const openModalInsertCode = ref(false)
+    const code = ref(null)
+    const status = ref('')
+    const sideImg = ref(require('@/assets/images/pages/undraw_fishing_hoxa.svg'))
+    const passwordToggleIcon = computed(() => (this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'))
+    const registerForm = ref(null)
+    const openModalCode = ref(null)
+    const registerCode = ref(null)
+    const clearRegisterForm = () => {
+      formData.value.first_name = ''
+      formData.value.last_name = ''
+      formData.value.phone = null
+      formData.value.nick_name = ''
+    }
+    const toast = useToast()
+    const register = () => {
+      registerForm.value.validate().then(success => {
+        if (success) {
+          // axios.post(`${process.env.VUE_APP_API_URL}/auth/sign-up/fisher`, formData.value)
+          entityRequests.auth.register(formData.value)
+            .then(() => {
+              openModalCode.value.show()
+            })
+            .catch(error => {
+              errorsRegistrations.value = error.response?.data?.errors?.phone.join()
+              registerForm.value.setErrors(error.response.data.error)
+            })
+        }
+      })
+    }
+    const checkIfCodeCorrect = () => {
+      context.refs.registerCode.validate().then(success => {
+        if (success) {
+          entityRequests.auth.code({
+            phone: formData.value.phone,
+            code: code.value,
+          })
+            .then(() => {
+              toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'User created',
+                  icon: 'CheckIcon',
+                  variant: 'success',
+                },
+              })
+              openModalCode.value.hide()
+              setTimeout(() => {
+                router.push('/login')
+                clearRegisterForm()
+              }, 1000)
+              // localStorage.setItem('userData', JSON.stringify(res.data.userData))
+              // this.$ability.update(res.data.userData.ability)
+            })
+            .catch(error => {
+              toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Code is invalid',
+                  icon: 'CheckIcon',
+                  variant: 'error',
+                },
+              })
+              registerCode.value.setErrors(error.response.data.error)
+            })
+        }
+      })
+    }
     return {
-      formData: {
-        first_name: '',
-        phone: null,
-        last_name: '',
-        nick_name: '',
-      },
-      errorsRegistrations: null,
-      openModalInsertCode: false,
-      code: null,
-      status: '',
-      sideImg: require('@/assets/images/pages/undraw_fishing_hoxa.svg'),
+      formData,
+      errorsRegistrations,
+      openModalInsertCode,
+      code,
+      status,
+      sideImg,
       // validation
       required,
       min,
+      //  computed
+      passwordToggleIcon,
+      // refs
+      openModalCode,
+      registerForm,
+      registerCode,
+      // methods
+      register,
+      checkIfCodeCorrect,
+      clearRegisterForm,
     }
-  },
-  computed: {
-    passwordToggleIcon() {
-      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
-    },
-    imgUrl() {
-      if (store.state.appConfig.layout.skin === 'dark') {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.sideImg = require('@/assets/images/pages/register-v2-dark.svg')
-        return this.sideImg
-      }
-      return this.sideImg
-    },
-  },
-  methods: {
-    register() {
-      this.$refs.registerForm.validate().then(success => {
-        if (success) {
-          axios.post('http://gofish.test/api/sign-up/fisher', this.formData)
-            .then(() => {
-              this.openModalInsertCode = true
-
-              // localStorage.setItem('userData', JSON.stringify(res.data.userData))
-              // this.$ability.update(res.data.userData.ability)
-            })
-            .catch(error => {
-              this.errorsRegistrations = error.response?.data?.errors?.phone.join()
-              this.$refs.registerForm.setErrors(error.response.data.error)
-            })
-        }
-      })
-    },
-    checkIfCodeCorrect() {
-      this.$refs.registerCode.validate().then(success => {
-        if (success) {
-          axios.post('http://gofish.test/api/sign-up/code', {
-            phone: this.formData.phone,
-            code: this.code,
-          })
-            .then(res => {
-              this.clearRegisterForm()
-              if (res.statusText === 'OK') {
-                this.$router.push('/login')
-              }
-              // localStorage.setItem('userData', JSON.stringify(res.data.userData))
-              // this.$ability.update(res.data.userData.ability)
-            })
-            .catch(error => {
-              this.$refs.registerCode.setErrors(error.response.data.error)
-            })
-        }
-      })
-    },
-    clearRegisterForm() {
-      this.formData.first_name = ''
-      this.formData.last_name = ''
-      this.formData.phone = null
-      this.formData.nick_name = ''
-    },
   },
 }
 
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/pages/page-auth.scss';
+@import 'src/@core/scss/vue/pages/page-auth.scss';
 .customSizeImage{
   margin: 0 auto;
   width: 80%;

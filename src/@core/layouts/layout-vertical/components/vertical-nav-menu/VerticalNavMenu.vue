@@ -26,6 +26,7 @@
             >
               <span class="brand-logo">
                 <b-img
+                  class="sizeLogo"
                   :src="appLogoImage"
                   alt="logo"
                 />
@@ -159,4 +160,7 @@ export default {
 
 <style lang="scss">
 @import "~@core/scss/base/core/menu/menu-types/vertical-menu.scss";
+.sizeLogo{
+  width: 30px;
+}
 </style>

@@ -1,6 +1,5 @@
 <template>
   <li
-    v-if="canViewVerticalNavMenuGroup(item)"
     class="nav-item has-sub"
     :class="{
       'open': isOpen,
@@ -8,6 +7,7 @@
       'sidebar-group-active': isActive,
     }"
   >
+<!--    v-if="canViewVerticalNavMenuGroup(item)"-->
     <b-link
       class="d-flex align-items-center"
       @click="() => updateGroupOpen(!isOpen)"

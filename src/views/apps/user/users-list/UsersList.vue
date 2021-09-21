@@ -260,11 +260,14 @@ export default {
     const isAddNewUserSidebarActive = ref(false)
 
     const roleOptions = [
+      // { label: 'Admin', value: 'admin' },
+      // { label: 'Author', value: 'author' },
+      // { label: 'Editor', value: 'editor' },
+      // { label: 'Maintainer', value: 'maintainer' },
+      // { label: 'Subscriber', value: 'subscriber' },
       { label: 'Admin', value: 'admin' },
-      { label: 'Author', value: 'author' },
-      { label: 'Editor', value: 'editor' },
-      { label: 'Maintainer', value: 'maintainer' },
-      { label: 'Subscriber', value: 'subscriber' },
+      { label: 'Owner', value: 'owner' },
+      { label: 'Fisher', value: 'fisher' },
     ]
 
     const planOptions = [

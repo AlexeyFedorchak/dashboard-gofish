@@ -7,9 +7,10 @@
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
         <p class="user-name font-weight-bolder mb-0">
-          {{ userData.fullName || userData.username }}
+          {{ userData.user.first_name }}
+          {{ userData.user.last_name }}
         </p>
-        <span class="user-status">{{ userData.role }}</span>
+        <span class="user-status">{{ userData.user.roles[0].name }}</span>
       </div>
       <b-avatar
         size="40"
@@ -20,7 +21,7 @@
         badge-variant="success"
       >
         <feather-icon
-          v-if="!userData.fullName"
+          v-if="!userData.user.first_name"
           icon="UserIcon"
           size="22"
         />
@@ -137,9 +138,14 @@ export default {
   },
   data() {
     return {
-      userData: JSON.parse(localStorage.getItem('userData')),
+      userData: {},
       avatarText,
     }
+  },
+  computed: {
+    // setUser() {
+    //   return this.userData = JSON.parse(localStorage.getItem('user'))
+    // },
   },
   methods: {
     logout() {
@@ -149,7 +155,7 @@ export default {
       localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
 
       // Remove userData from localStorage
-      localStorage.removeItem('userData')
+      localStorage.removeItem('user')
 
       // Reset ability
       this.$ability.update(initialAbility)

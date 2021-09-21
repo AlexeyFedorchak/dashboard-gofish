@@ -19,8 +19,8 @@
         <div class=" d-lg-flex align-items-center justify-content-center px-5 customSizeImage">
           <b-img
             fluid
-            :src="imgUrl"
-            alt="Login V2"
+            :src="sideImg"
+            alt="Logo"
           />
         </div>
       </b-col>
@@ -31,13 +31,6 @@
         lg="4"
         class="d-flex align-items-center auth-bg px-2 p-lg-5"
       >
-        <div>
-          <img
-            class="anchor"
-            src="@/assets/images/logo/fish-hook.svg"
-            alt=""
-          >
-        </div>
 
         <b-col
           sm="8"
@@ -131,14 +124,15 @@
     </b-row>
     <b-modal
       id="modal-login"
+      ref="openModalCode"
       cancel-variant="outline-secondary"
       ok-title="Login"
       cancel-title="Close"
       centered
+      no-close-on-backdrop
+      no-close-on-esc
       title="Insert code"
-      :visible="openModalInsertCode"
-      @ok="checkIfCodeCorrect"
-      @hidden="openModalInsertCode = false"
+      @ok.prevent="checkIfCodeCorrect"
     >
       <!-- form -->
       <validation-observer
@@ -191,11 +185,18 @@ import {
   VBTooltip,
   BModal, BFormCheckbox,
 } from 'bootstrap-vue'
-import { required, email } from '@validations'
+import { required } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
-import axios from 'axios'
 import inputRules from '@/mixins/inputRules'
+import notificationMixin from '@/mixins/notificationMixin'
+import calendarStoreModule from '@/views/apps/calendar/calendarStoreModule'
+import { ref, computed, onUnmounted } from '@vue/composition-api'
+import { useToast } from 'vue-toastification/composition'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import router from '@/router'
+import { entityRequests } from '@/service/entityRequest'
+import { setToken } from '@/service/auth'
 
 export default {
   directives: {
@@ -218,87 +219,116 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-  mixins: [togglePasswordVisibility, inputRules],
-  data() {
-    return {
-      status: '',
-      sideImg: require('@/assets/images/pages/undraw_fish_bowl_uu88.svg'),
-      phone: null,
-      openModalInsertCode: false,
-      catchErrorFromLoginForm: true,
-      code: null,
-      messageError: '',
-      // validation rules
-      required,
-      email,
+  mixins: [togglePasswordVisibility, inputRules, notificationMixin],
+  setup(props, context) {
+    const CALENDAR_APP_STORE_MODULE_NAME = 'auth'
+
+    // Register module
+    if (!store.hasModule(CALENDAR_APP_STORE_MODULE_NAME)) store.registerModule(CALENDAR_APP_STORE_MODULE_NAME, calendarStoreModule)
+
+    // UnRegister on leave
+    onUnmounted(() => {
+      if (store.hasModule(CALENDAR_APP_STORE_MODULE_NAME)) store.unregisterModule(CALENDAR_APP_STORE_MODULE_NAME)
+    })
+
+    const status = ref('')
+    const sideImg = ref(require('@/assets/images/pages/undraw_fish_bowl_uu88.svg'))
+    const phone = ref(null)
+    const openModalInsertCode = ref(false)
+    const catchErrorFromLoginForm = ref(false)
+    const code = ref(null)
+    const messageError = ref('')
+    const passwordToggleIcon = computed(() => (this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'))
+    const loginForm = ref(null)
+    const openModalCode = ref(null)
+    const registerCode = ref(null)
+    const toast = useToast()
+    const clearPhoneField = () => {
+      phone.value = ''
     }
-  },
-  computed: {
-    passwordToggleIcon() {
-      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
-    },
-    imgUrl() {
-      if (store.state.appConfig.layout.skin === 'dark') {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.sideImg = require('@/assets/images/pages/login-v2-dark.svg')
-        return this.sideImg
-      }
-      return this.sideImg
-    },
-  },
-  methods: {
-    login() {
-      this.$refs.loginForm.validate().then(success => {
+    const login = () => {
+      loginForm.value.validate().then(success => {
         if (success) {
-          axios.post('http://gofish.test/api/login', {
-            phone: this.phone,
+          entityRequests.auth.login({
+            phone: phone.value,
           })
             .then(() => {
-              this.openModalInsertCode = true
-              this.catchErrorFromLoginForm = false
-              // this.clearPhoneField()
-              // localStorage.setItem('userData', JSON.stringify(userData))
-              // this.$ability.update(userData.ability)
+              catchErrorFromLoginForm.value = false
+              openModalCode.value.show()
             })
             .catch(error => {
-              this.messageError = error.response.data.errors.phone.join()
-              this.catchErrorFromLoginForm = true
-              this.$refs.loginForm.setErrors(error.response.data.error)
+              messageError.value = error.response.data.errors.phone.join()
+              catchErrorFromLoginForm.value = true
+              loginForm.value.setErrors(error.response.data.error)
             })
         }
       })
-    },
-    checkIfCodeCorrect() {
-      this.$refs.registerCode.validate().then(success => {
+    }
+    const checkIfCodeCorrect = () => {
+      context.refs.registerCode.validate().then(success => {
         if (success) {
-          axios.post('http://gofish.test/api/sign-up/code', {
-            code: this.code,
-            phone: this.phone,
-          })
+          const formData = {
+            phone: phone.value,
+            code: code.value,
+          }
+          entityRequests.auth.code(formData)
             .then(res => {
-              this.clearPhoneField()
-              if (res.statusText === 'OK') {
-                this.$router.push('/')
-              }
-              // localStorage.setItem('userData', JSON.stringify(res.data.userData))
-              // this.$ability.update(res.data.userData.ability)
+              console.log(res)
+              localStorage.setItem('user', JSON.stringify(res))
+              setToken(res.access_token)
+              openModalCode.value.hide()
+              router.push('/')
+              clearPhoneField()
+              toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Welcome to GoFish',
+                  icon: 'CheckIcon',
+                  variant: 'success',
+                },
+              })
             })
             .catch(error => {
-              this.$refs.registerCode.setErrors(error.response.data.error)
+              toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'Code is invalid',
+                  icon: 'CheckIcon',
+                  variant: 'error',
+                  type: 'error',
+                },
+              })
+              registerCode.value.setErrors(error.response.data.error)
             })
         }
       })
-    },
-    clearPhoneField() {
-      this.phone = ''
-    },
+    }
 
+    return {
+      status,
+      sideImg,
+      phone,
+      openModalInsertCode,
+      catchErrorFromLoginForm,
+      code,
+      messageError,
+      required,
+      // computed
+      passwordToggleIcon,
+      // refs
+      loginForm,
+      openModalCode,
+      registerCode,
+      // methods
+      login,
+      checkIfCodeCorrect,
+      clearPhoneField,
+    }
   },
 }
 </script>
-
 <style lang="scss">
-@import '@core/scss/vue/pages/page-auth.scss';
+@import '~@core/scss/vue/pages/page-auth.scss';
 .customSizeImage{
   margin: 0 auto;
   width: 80%;
@@ -306,23 +336,5 @@ export default {
 .error > p{
   text-align: center;
   color: red;
-}
-.anchor{
-  width: 30%;
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translate(-50%);
-  animation: show 1s cubic-bezier(.17,.67,.37,1.18) 1;
-}
-@keyframes show {
-  from{
-    opacity: 0;
-    transform:translate(-50%,100px);
-  }
-  to{
-    opacity: 1;
-    transform:translate(-50%,0px);
-  }
 }
 </style>

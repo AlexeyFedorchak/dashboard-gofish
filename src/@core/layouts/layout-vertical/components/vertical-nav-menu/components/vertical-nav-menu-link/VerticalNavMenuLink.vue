@@ -6,6 +6,7 @@
       'disabled': item.disabled
     }"
   >
+<!--    v-if="canViewVerticalNavMenuLink(item)"-->
     <b-link
       v-bind="linkProps"
       class="d-flex align-items-center"
