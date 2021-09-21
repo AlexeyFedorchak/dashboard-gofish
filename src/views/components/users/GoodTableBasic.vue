@@ -1,5 +1,5 @@
 <template>
-  <b-card-code title="Basic Table">
+  <b-card-code title="Users list">
 
     <!-- search input -->
     <div class="custom-search d-flex justify-content-end">
@@ -19,7 +19,7 @@
     <!-- table -->
     <vue-good-table
       :columns="columns"
-      :rows="rows"
+      :rows="users"
       :rtl="direction"
       :search-options="{
         enabled: true,
@@ -49,16 +49,26 @@
           class="text-nowrap"
         >
           <b-avatar
-            :src="props.row.avatar"
+            :src="props.row.photo_path"
             class="mx-1"
           />
-          <span class="text-nowrap">{{ props.row.fullName }}</span>
+          <span class="text-nowrap">{{ fullName(props.row) }}</span>
+        </span>
+
+        <!-- Column: Nick Name -->
+        <span v-else-if="props.column.field === 'nickName'">
+            {{ props.row.nick_name }}
+        </span>
+
+        <!-- Column: Start Date -->
+        <span v-else-if="props.column.field === 'startDate'">
+            {{ getDate(props.row.roles[0].created_at) }}
         </span>
 
         <!-- Column: Status -->
         <span v-else-if="props.column.field === 'status'">
-          <b-badge :variant="statusVariant(props.row.status)">
-            {{ props.row.status }}
+          <b-badge :variant="statusVariant(props.row.roles[0].name)">
+            {{ props.row.roles[0].name }}
           </b-badge>
         </span>
 
@@ -189,16 +199,12 @@ export default {
           field: 'fullName',
         },
         {
-          label: 'Email',
-          field: 'email',
+          label: 'Nick Name',
+          field: 'nickName',
         },
         {
           label: 'Date',
           field: 'startDate',
-        },
-        {
-          label: 'Salary',
-          field: 'salary',
         },
         {
           label: 'Status',
@@ -212,18 +218,14 @@ export default {
       rows: [],
       searchTerm: '',
       status: [{
-        1: 'Current',
-        2: 'Professional',
-        3: 'Rejected',
-        4: 'Resigned',
-        5: 'Applied',
+        1: 'fisher',
+        2: 'admin',
+        3: 'owner',
       },
       {
         1: 'light-primary',
         2: 'light-success',
         3: 'light-danger',
-        4: 'light-warning',
-        5: 'light-info',
       }],
     }
   },
@@ -231,11 +233,9 @@ export default {
     statusVariant() {
       const statusColor = {
         /* eslint-disable key-spacing */
-        Current      : 'light-primary',
-        Professional : 'light-success',
-        Rejected     : 'light-danger',
-        Resigned     : 'light-warning',
-        Applied      : 'light-info',
+        fisher      : 'light-primary',
+        admin       : 'light-success',
+        owner       : 'light-danger',
         /* eslint-enable key-spacing */
       }
 
@@ -251,10 +251,25 @@ export default {
       this.dir = false
       return this.dir
     },
+    users() {
+      const users = this.$store.getters.getNewUsersInfo
+      return users || []
+    },
   },
-  created() {
-    this.$http.get('/good-table/basic')
-      .then(res => { this.rows = res.data })
+  beforeMount() {
+    this.$store.dispatch('getUsers')
+  },
+  methods: {
+    fullName(user) {
+      return `${user.first_name || ''} ${user.last_name || ''}`.trim()
+    },
+    getDate(date) {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    },
   },
 }
 </script>

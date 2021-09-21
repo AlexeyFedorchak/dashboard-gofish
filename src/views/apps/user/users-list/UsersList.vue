@@ -89,9 +89,9 @@
             <template #aside>
               <b-avatar
                 size="32"
-                :src="data.item.avatar"
-                :text="avatarText(data.item.fullName)"
-                :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
+                :src="data.item.photo_path"
+                :text="avatarText(data.item.nick_name)"
+                :variant="`light-${resolveUserRoleVariant(data.item.roles[0].name)}`"
                 :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               />
             </template>
@@ -99,9 +99,9 @@
               :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
             >
-              {{ data.item.fullName }}
+              {{ fullName(data.item) }}
             </b-link>
-            <small class="text-muted">@{{ data.item.username }}</small>
+            <small class="text-muted">@{{ data.item.nick_name }}</small>
           </b-media>
         </template>
 
@@ -109,12 +109,12 @@
         <template #cell(role)="data">
           <div class="text-nowrap">
             <feather-icon
-              :icon="resolveUserRoleIcon(data.item.role)"
+              :icon="resolveUserRoleIcon(data.item.roles[0].name)"
               size="18"
               class="mr-50"
-              :class="`text-${resolveUserRoleVariant(data.item.role)}`"
+              :class="`text-${resolveUserRoleVariant(data.item.roles[0].name)}`"
             />
-            <span class="align-text-top text-capitalize">{{ data.item.role }}</span>
+            <span class="align-text-top text-capitalize">{{ data.item.roles[0].name }}</span>
           </div>
         </template>
 
@@ -122,10 +122,10 @@
         <template #cell(status)="data">
           <b-badge
             pill
-            :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
+            :variant="`light-${resolveUserStatusVariant(data.item.is_activated ? 'active' : 'inactive')}`"
             class="text-capitalize"
           >
-            {{ data.item.status }}
+            {{ data.item.is_activated ? 'active' : 'inactive' }}
           </b-badge>
         </template>
 
@@ -261,10 +261,10 @@ export default {
 
     const roleOptions = [
       { label: 'Admin', value: 'admin' },
-      { label: 'Author', value: 'author' },
-      { label: 'Editor', value: 'editor' },
-      { label: 'Maintainer', value: 'maintainer' },
-      { label: 'Subscriber', value: 'subscriber' },
+      { label: 'Owner', value: 'owner' },
+      { label: 'Fisher', value: 'fisher' },
+      // { label: 'Maintainer', value: 'maintainer' },
+      // { label: 'Subscriber', value: 'subscriber' },
     ]
 
     const planOptions = [
@@ -275,7 +275,7 @@ export default {
     ]
 
     const statusOptions = [
-      { label: 'Pending', value: 'pending' },
+      // { label: 'Pending', value: 'pending' },
       { label: 'Active', value: 'active' },
       { label: 'Inactive', value: 'inactive' },
     ]
@@ -309,7 +309,6 @@ export default {
 
       // Sidebar
       isAddNewUserSidebarActive,
-
       fetchUsers,
       tableColumns,
       perPage,
@@ -331,8 +330,8 @@ export default {
       resolveUserRoleIcon,
       resolveUserStatusVariant,
 
-      roleOptions,
       planOptions,
+      roleOptions,
       statusOptions,
 
       // Extra Filters
@@ -340,6 +339,11 @@ export default {
       planFilter,
       statusFilter,
     }
+  },
+  methods: {
+    fullName(user) {
+      return `${user.first_name || ''} ${user.last_name || ''}`.trim()
+    },
   },
 }
 </script>

@@ -1,5 +1,7 @@
 import axios from '@axios'
 
+const { VUE_APP_USERS } = process.env
+
 export default {
   namespaced: true,
   state: {},
@@ -7,9 +9,10 @@ export default {
   mutations: {},
   actions: {
     fetchUsers(ctx, queryParams) {
+      console.log(queryParams)
       return new Promise((resolve, reject) => {
         axios
-          .get('/apps/user/users', { params: queryParams })
+          .get(`${VUE_APP_USERS}/users`, { params: queryParams })
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
@@ -17,7 +20,7 @@ export default {
     fetchUser(ctx, { id }) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`/apps/user/users/${id}`)
+          .get(`${VUE_APP_USERS}/user/${id}`)
           .then(response => resolve(response))
           .catch(error => reject(error))
       })
@@ -25,7 +28,7 @@ export default {
     addUser(ctx, userData) {
       return new Promise((resolve, reject) => {
         axios
-          .post('/apps/user/users', { user: userData })
+          .post(`${VUE_APP_USERS}/users`, { user: userData })
           .then(response => resolve(response))
           .catch(error => reject(error))
       })

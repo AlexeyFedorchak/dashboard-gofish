@@ -13,7 +13,7 @@
 
 <script>
 import { BRow, BCol } from 'bootstrap-vue'
-import GoodTableBasic from './GoodTableBasic.vue'
+import GoodTableBasic from '../../components/users/GoodTableBasic.vue'
 import GoodTableRowGroup from './GoodTableRowGroup.vue'
 import GoodTableColumnSearch from './GoodTableColumnSearch.vue'
 import GoodTableAdvanceSearch from './GoodTableAdvanceSearch.vue'
