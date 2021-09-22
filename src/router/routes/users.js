@@ -16,7 +16,7 @@ export default [
   {
     path: '/lakes',
     name: 'lakes',
-    component: () => import('@/views/components/users/Users.vue'),
+    component: () => import('@/views/apps/lake/lakes-list/LakesList.vue'),
     meta: {
       pageTitle: 'Lakes',
       breadcrumb: [

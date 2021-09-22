@@ -30,13 +30,7 @@ tag
 tagVariant
 
 */
-import dashboard from './dashboard'
-import appsAndPages from './apps-and-pages'
-import others from './others'
-import chartsAndMaps from './charts-and-maps'
-import uiElements from './ui-elements'
-import formAndTable from './forms-and-table'
-import users from './users'
+import usersAndLakes from './users-and-lakes'
 
 // Array of sections
-export default [...users, ...dashboard, ...appsAndPages, ...uiElements, ...formAndTable, ...chartsAndMaps, ...others]
+export default [...usersAndLakes]

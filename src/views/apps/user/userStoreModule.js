@@ -1,6 +1,4 @@
-import axios from '@axios'
-
-const { VUE_APP_USERS } = process.env
+import { entityRequests } from '@/service/entityRequest'
 
 export default {
   namespaced: true,
@@ -8,30 +6,21 @@ export default {
   getters: {},
   mutations: {},
   actions: {
-    fetchUsers(ctx, queryParams) {
-      console.log(queryParams)
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`${VUE_APP_USERS}/users`, { params: queryParams })
-          .then(response => resolve(response))
-          .catch(error => reject(error))
-      })
+    async fetchUsers() {
+      const res = await entityRequests.users.listUsers()
+      return res
     },
-    fetchUser(ctx, { id }) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`${VUE_APP_USERS}/user/${id}`)
-          .then(response => resolve(response))
-          .catch(error => reject(error))
-      })
+    async fetchUser(ctx, { id }) {
+      const res = await entityRequests.users.currentUser(id)
+      return res
     },
-    addUser(ctx, userData) {
-      return new Promise((resolve, reject) => {
-        axios
-          .post(`${VUE_APP_USERS}/users`, { user: userData })
-          .then(response => resolve(response))
-          .catch(error => reject(error))
-      })
-    },
+    // addUser(ctx, userData) {
+    //   return new Promise((resolve, reject) => {
+    //     axios
+    //       .post(`${VUE_APP_API_URL}/users`, { user: userData })
+    //       .then(response => resolve(response))
+    //       .catch(error => reject(error))
+    //   })
+    // },
   },
 }

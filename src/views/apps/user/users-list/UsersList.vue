@@ -91,7 +91,7 @@
                 size="32"
                 :src="data.item.photo_path"
                 :text="avatarText(data.item.nick_name)"
-                :variant="`light-${resolveUserRoleVariant(data.item.roles[0].name)}`"
+                :variant="`light-${resolveUserRoleVariant(data.item.roles.find(e => e).name)}`"
                 :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
               />
             </template>
@@ -109,12 +109,12 @@
         <template #cell(role)="data">
           <div class="text-nowrap">
             <feather-icon
-              :icon="resolveUserRoleIcon(data.item.roles[0].name)"
+              :icon="resolveUserRoleIcon(data.item.roles.find(e => e).name)"
               size="18"
               class="mr-50"
-              :class="`text-${resolveUserRoleVariant(data.item.roles[0].name)}`"
+              :class="`text-${resolveUserRoleVariant(data.item.roles.find(e => e).name)}`"
             />
-            <span class="align-text-top text-capitalize">{{ data.item.roles[0].name }}</span>
+            <span class="align-text-top text-capitalize">{{ data.item.roles.find(e => e).name }}</span>
           </div>
         </template>
 
@@ -247,7 +247,7 @@ export default {
     vSelect,
   },
   setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
+    const USER_APP_STORE_MODULE_NAME = 'user'
 
     // Register module
     if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
@@ -280,7 +280,7 @@ export default {
       { label: 'Inactive', value: 'inactive' },
     ]
 
-    const fullName = user => `${user?.first_name} ${user?.last_name}` || ''
+    const fullName = user => `${user?.first_name || ''} ${user?.last_name || ''}`
 
     const {
       fetchUsers,
