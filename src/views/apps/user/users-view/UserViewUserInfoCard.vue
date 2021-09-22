@@ -173,15 +173,14 @@ export default {
   },
   setup() {
     const { resolveUserRoleVariant } = useUsersList()
+
+    const fullName = user => `${user?.first_name} ${user?.last_name}` || ''
+
     return {
+      fullName,
       avatarText,
       resolveUserRoleVariant,
     }
-  },
-  methods: {
-    fullName(user) {
-      return `${user.first_name || ''} ${user.last_name || ''}`.trim()
-    },
   },
 }
 </script>

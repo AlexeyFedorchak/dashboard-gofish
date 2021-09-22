@@ -17,4 +17,7 @@ export const entityRequests = {
     listUsers: () => requestHandler(getApiUrl(['users']), 'get', null),
     currentUser: id => requestHandler(getApiUrl(['user', id]), 'get', null),
   },
+  lakes: {
+    listLakes: () => requestHandler(getApiUrl(['lakes']), 'get', null),
+  },
 }
