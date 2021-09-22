@@ -21,7 +21,7 @@
           <b-img
             fluid
             :src="imgUrl"
-            alt="Forgot password V2"
+            alt="Forgot password"
           />
         </div>
       </b-col>

@@ -6,7 +6,10 @@
   >
     <template #button-content>
       <div class="d-sm-flex d-none user-nav">
-        <p class="user-name font-weight-bolder mb-0">
+        <p
+          v-if="profile"
+          class="user-name font-weight-bolder mb-0"
+        >
           {{ profile.first_name }}
           {{ profile.last_name }}
         </p>
@@ -130,9 +133,9 @@
 import {
   BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
-import { initialAbility } from '@/libs/acl/config'
-import useJwt from '@/auth/jwt/useJwt'
 import { avatarText } from '@core/utils/filter'
+import { entityRequests } from '@/service/entityRequest'
+import { removeLoginData } from '@/service/auth'
 
 export default {
   components: {
@@ -144,7 +147,6 @@ export default {
   data() {
     return {
       userData: {},
-      role: '',
       avatarText,
     }
   },
@@ -155,19 +157,15 @@ export default {
   },
   methods: {
     logout() {
-      // Remove userData from localStorage
-      // ? You just removed token from localStorage. If you like, you can also make API call to backend to blacklist used token
-      localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
-      localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
-
-      // Remove userData from localStorage
-      localStorage.removeItem('user')
-
-      // Reset ability
-      this.$ability.update(initialAbility)
-
-      // Redirect to login page
-      this.$router.push({ name: 'auth-login' })
+      entityRequests.auth.logout()
+        .then(() => {
+          removeLoginData()
+          // Redirect to login page
+          this.$router.push({ name: 'auth-login' })
+        })
+        .catch(error => {
+          console.warn("can't refresh token", error)
+        })
     },
   },
 }

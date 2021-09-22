@@ -273,7 +273,6 @@ export default {
           }
           entityRequests.auth.code(formData)
             .then(res => {
-              localStorage.setItem('user', JSON.stringify(res))
               setToken(res.access_token)
               openModalCode.value.hide()
               router.push('/')
@@ -292,9 +291,8 @@ export default {
                 component: ToastificationContent,
                 props: {
                   title: 'Code is invalid',
-                  icon: 'CheckIcon',
-                  variant: 'error',
-                  type: 'error',
+                  icon: 'AlertTriangleIcon',
+                  variant: 'danger',
                 },
               })
               registerCode.value.setErrors(error.response.data.error)

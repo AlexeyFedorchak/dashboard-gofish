@@ -11,6 +11,7 @@ export const entityRequests = {
     me: () => requestHandler(getApiUrl(['profile']), 'get', null),
     code: data => requestHandler(getApiUrl(['auth', 'code']), 'post', null, data),
     login: data => requestHandler(getApiUrl(['auth', 'login']), 'post', null, data),
+    logout: () => requestHandler(getApiUrl(['auth', 'logout']), 'post', null),
   },
   users: {
     listUsers: () => requestHandler(getApiUrl(['users']), 'get', null),

@@ -121,28 +121,6 @@
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
-              <!-- nick-name -->
-              <b-form-group
-                label="Nickname"
-                label-for="register-nickname"
-              >
-                <validation-provider
-                  #default="{ errors }"
-                  name="Nickname"
-                  vid="nickname"
-                  rules="required|min:2"
-                >
-                  <b-form-input
-                    id="register-nickname"
-                    v-model="formData.nick_name"
-                    name="register-nickname"
-                    :state="errors.length > 0 ? false:null"
-                    placeholder="nickname"
-                    @keypress="isLetter($event)"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
               <!--Privacy-->
               <b-form-group>
                 <b-form-checkbox
@@ -292,14 +270,17 @@ export default {
       formData.value.first_name = ''
       formData.value.last_name = ''
       formData.value.phone = null
-      formData.value.nick_name = ''
     }
     const toast = useToast()
     const register = () => {
       registerForm.value.validate().then(success => {
         if (success) {
-          // axios.post(`${process.env.VUE_APP_API_URL}/auth/sign-up/fisher`, formData.value)
-          entityRequests.auth.register(formData.value)
+          entityRequests.auth.register({
+            first_name: formData.value.first_name,
+            last_name: formData.value.last_name,
+            phone: formData.value.phone,
+            nick_name: `${formData.value.first_name}${formData.value.last_name}`,
+          })
             .then(() => {
               openModalCode.value.show()
             })
@@ -324,6 +305,7 @@ export default {
                   title: 'User created',
                   icon: 'CheckIcon',
                   variant: 'success',
+                  type: 'success',
                 },
               })
               openModalCode.value.hide()
@@ -331,16 +313,14 @@ export default {
                 router.push('/login')
                 clearRegisterForm()
               }, 1000)
-              // localStorage.setItem('userData', JSON.stringify(res.data.userData))
-              // this.$ability.update(res.data.userData.ability)
             })
             .catch(error => {
               toast({
                 component: ToastificationContent,
                 props: {
                   title: 'Code is invalid',
-                  icon: 'CheckIcon',
-                  variant: 'error',
+                  icon: 'AlertTriangleIcon',
+                  variant: 'danger',
                 },
               })
               registerCode.value.setErrors(error.response.data.error)
