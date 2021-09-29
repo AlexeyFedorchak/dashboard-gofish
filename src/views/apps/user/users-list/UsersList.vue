@@ -154,7 +154,7 @@
               <span class="align-middle ml-50">Edit</span>
             </b-dropdown-item>
 
-            <b-dropdown-item>
+            <b-dropdown-item @click="deleteUser(data.item.id)">
               <feather-icon icon="TrashIcon" />
               <span class="align-middle ml-50">Delete</span>
             </b-dropdown-item>
@@ -263,24 +263,14 @@ export default {
       { label: 'Admin', value: 'admin' },
       { label: 'Owner', value: 'owner' },
       { label: 'Fisher', value: 'fisher' },
-      // { label: 'Maintainer', value: 'maintainer' },
-      // { label: 'Subscriber', value: 'subscriber' },
-    ]
-
-    const planOptions = [
-      { label: 'Basic', value: 'basic' },
-      { label: 'Company', value: 'company' },
-      { label: 'Enterprise', value: 'enterprise' },
-      { label: 'Team', value: 'team' },
     ]
 
     const statusOptions = [
-      // { label: 'Pending', value: 'pending' },
       { label: 'Active', value: 'active' },
       { label: 'Inactive', value: 'inactive' },
     ]
 
-    const fullName = user => `${user?.first_name || ''} ${user?.last_name || ''}`
+    const fullName = user => `${user?.first_name} ${user?.last_name}`
 
     const {
       fetchUsers,
@@ -307,6 +297,13 @@ export default {
       statusFilter,
     } = useUsersList()
 
+    const deleteUser = id => {
+      store.dispatch('user/deleteUser', id)
+        .then(() => {
+          refetchData()
+        })
+    }
+
     return {
 
       // Sidebar
@@ -324,6 +321,7 @@ export default {
       refUserListTable,
       refetchData,
       fullName,
+      deleteUser,
 
       // Filter
       avatarText,
@@ -333,7 +331,6 @@ export default {
       resolveUserRoleIcon,
       resolveUserStatusVariant,
 
-      planOptions,
       roleOptions,
       statusOptions,
 

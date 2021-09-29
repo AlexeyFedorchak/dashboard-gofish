@@ -39,19 +39,19 @@
           @reset.prevent="resetForm"
         >
 
-          <!-- Full Name -->
+          <!-- First Name -->
           <validation-provider
             #default="validationContext"
-            name="Full Name"
+            name="Name"
             rules="required"
           >
             <b-form-group
-              label="Full Name"
-              label-for="full-name"
+              label="Name"
+              label-for="name"
             >
               <b-form-input
-                id="full-name"
-                v-model="userData.fullName"
+                id="first-name"
+                v-model="userData.first_name"
                 autofocus
                 :state="getValidationState(validationContext)"
                 trim
@@ -64,19 +64,19 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Username -->
-          <validation-provider
+          <!-- Last Name -->
+          <!-- <validation-provider
             #default="validationContext"
-            name="Username"
+            name="Last name"
             rules="required|alpha-num"
           >
             <b-form-group
-              label="Username"
-              label-for="username"
+              label="Last Name"
+              label-for="last-name"
             >
               <b-form-input
-                id="username"
-                v-model="userData.username"
+                id="last-name"
+                v-model="userData.last_name"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -85,44 +85,21 @@
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
-          </validation-provider>
+          </validation-provider> -->
 
-          <!-- Email -->
+          <!-- Phone -->
           <validation-provider
             #default="validationContext"
-            name="Email"
-            rules="required|email"
-          >
-            <b-form-group
-              label="Email"
-              label-for="email"
-            >
-              <b-form-input
-                id="email"
-                v-model="userData.email"
-                :state="getValidationState(validationContext)"
-                trim
-              />
-
-              <b-form-invalid-feedback>
-                {{ validationContext.errors[0] }}
-              </b-form-invalid-feedback>
-            </b-form-group>
-          </validation-provider>
-
-          <!-- Company -->
-          <validation-provider
-            #default="validationContext"
-            name="Contact"
+            name="Phone"
             rules="required"
           >
             <b-form-group
-              label="Contact"
-              label-for="contact"
+              label="Phone"
+              label-for="phone"
             >
               <b-form-input
-                id="contact"
-                v-model="userData.contact"
+                id="userPhone"
+                v-model="userData.phone"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -133,19 +110,42 @@
             </b-form-group>
           </validation-provider>
 
-          <!-- Company -->
+          <!-- User Password -->
           <validation-provider
             #default="validationContext"
-            name="Company"
+            name="User password"
             rules="required"
           >
             <b-form-group
-              label="Company"
-              label-for="company"
+              label="Password"
+              label-for="user-password"
+              :state="getValidationState(validationContext)"
             >
               <b-form-input
-                id="company"
-                v-model="userData.company"
+                type="password"
+                id="nick-name"
+                v-model="userData.password"
+                :state="getValidationState(validationContext)"
+              />
+              <b-form-invalid-feedback :state="getValidationState(validationContext)">
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider>
+
+          <!-- Nick Name -->
+          <!-- <validation-provider
+            #default="validationContext"
+            name="Nick Name"
+            rules="required"
+          >
+            <b-form-group
+              label="Nick Name"
+              label-for="nick-name"
+            >
+              <b-form-input
+                id="nick-name"
+                v-model="userData.name"
                 :state="getValidationState(validationContext)"
                 trim
               />
@@ -154,23 +154,47 @@
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
-          </validation-provider>
+          </validation-provider> -->
 
-          <!-- Country -->
-          <validation-provider
+          <!-- Role -->
+          <!-- <validation-provider
             #default="validationContext"
-            name="Country"
+            name="Role"
             rules="required"
           >
             <b-form-group
-              label="Country"
-              label-for="country"
+              label="Role"
+              label-for="role"
+            >
+              <b-form-input
+                id="role"
+                v-model="userData.roles[0].name"
+                :state="getValidationState(validationContext)"
+                trim
+              />
+
+              <b-form-invalid-feedback>
+                {{ validationContext.errors[0] }}
+              </b-form-invalid-feedback>
+            </b-form-group>
+          </validation-provider> -->
+
+          <!-- Role -->
+          <validation-provider
+            #default="validationContext"
+            name="Role"
+            rules="required"
+          >
+            <b-form-group
+              label="Role"
+              label-for="role"
               :state="getValidationState(validationContext)"
             >
               <v-select
-                v-model="userData.country"
+                v-model="userData.roleId"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="countries"
+                :options="roles"
+                :reduce="val => val.id"
                 :clearable="false"
                 input-id="country"
               />
@@ -181,7 +205,7 @@
           </validation-provider>
 
           <!-- User Role -->
-          <validation-provider
+          <!-- <validation-provider
             #default="validationContext"
             name="User Role"
             rules="required"
@@ -192,7 +216,7 @@
               :state="getValidationState(validationContext)"
             >
               <v-select
-                v-model="userData.role"
+                v-model="userData.roleId"
                 :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
                 :options="roleOptions"
                 :reduce="val => val.value"
@@ -203,10 +227,10 @@
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
-          </validation-provider>
+          </validation-provider> -->
 
           <!-- Plan -->
-          <validation-provider
+          <!-- <validation-provider
             #default="validationContext"
             name="Plan"
             rules="required"
@@ -228,7 +252,7 @@
                 {{ validationContext.errors[0] }}
               </b-form-invalid-feedback>
             </b-form-group>
-          </validation-provider>
+          </validation-provider> -->
 
           <!-- Form Actions -->
           <div class="d-flex mt-2">
@@ -262,7 +286,7 @@ import {
 } from 'bootstrap-vue'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import { ref } from '@vue/composition-api'
-import { required, alphaNum, email } from '@validations'
+import { required, alphaNum } from '@validations'
 import formValidation from '@core/comp-functions/forms/form-validation'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
@@ -308,29 +332,35 @@ export default {
     return {
       required,
       alphaNum,
-      email,
       countries,
     }
   },
-  setup(props, { emit }) {
+  setup({ roleOptions }, { emit }) {
     const blankUserData = {
-      fullName: '',
-      username: '',
-      email: '',
-      role: null,
-      currentPlan: null,
-      company: '',
-      country: '',
-      contact: '',
+      first_name: '',
+      phone: '',
+      roleId: '',
+      is_activated: 0,
+      password: '',
     }
 
+    const roles = roleOptions.reverse().map((role, i) => ({
+      ...role,
+      id: i + 1,
+    }))
+
     const userData = ref(JSON.parse(JSON.stringify(blankUserData)))
-    const resetuserData = () => {
+
+    const selectRole = role => {
+      userData.roleId = roleOptions.indexOf(role) + 1
+    }
+
+    const resetUserData = () => {
       userData.value = JSON.parse(JSON.stringify(blankUserData))
     }
 
     const onSubmit = () => {
-      store.dispatch('app-user/addUser', userData.value)
+      store.dispatch('user/addUser', userData.value)
         .then(() => {
           emit('refetch-data')
           emit('update:is-add-new-user-sidebar-active', false)
@@ -341,11 +371,13 @@ export default {
       refFormObserver,
       getValidationState,
       resetForm,
-    } = formValidation(resetuserData)
+    } = formValidation(resetUserData)
 
     return {
       userData,
       onSubmit,
+      selectRole,
+      roles,
 
       refFormObserver,
       getValidationState,

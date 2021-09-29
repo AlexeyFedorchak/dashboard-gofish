@@ -1,7 +1,15 @@
 <template>
   <b-card-code title="Lakes list">
     <!-- search input -->
-    <div class="custom-search d-flex justify-content-end">
+    <div class="custom-search d-flex justify-content-between align-items-center">
+      <b-button
+        variant="primary"
+        class="mr-1"
+        to="/lake/create"
+      >
+        Create lake
+      </b-button>
+
       <b-form-group>
         <div class="d-flex align-items-center">
           <label class="mr-1">Search</label>
@@ -43,16 +51,17 @@
       >
 
         <!-- Column: Name -->
-        <span
+        <b-link
           v-if="props.column.field === 'fullName'"
           class="text-nowrap"
+          :to="{ name: 'apps-lakes-view', params: { slug: props.row.slug }}"
         >
           <b-avatar
             :src="props.row.main_image_path"
             class="mx-1"
           />
           <span class="text-nowrap">{{ props.row.name }}</span>
-        </span>
+        </b-link>
 
         <!-- Column: Address -->
         <span v-else-if="props.column.field === 'address'">
@@ -67,13 +76,6 @@
         >
           {{ getFullName(props.row.owner) }}
         </b-link>
-
-        <!-- Column: Status -->
-        <!-- <span v-else-if="props.column.field === 'status'">
-          <b-badge :variant="props.row.name">
-            {{ props.row.name }}
-          </b-badge>
-        </span> -->
 
         <!-- Column: Fishes -->
         <span v-else-if="props.column.field === 'fishes'">
@@ -118,14 +120,18 @@
                   class="text-body align-middle mr-25"
                 />
               </template>
-              <b-dropdown-item>
+              <b-dropdown-item
+                :to="{ name: 'lake-update', params: { slug: props.row.slug } }"
+              >
                 <feather-icon
                   icon="Edit2Icon"
                   class="mr-50"
                 />
                 <span>Edit</span>
               </b-dropdown-item>
-              <b-dropdown-item>
+              <b-dropdown-item
+                @click="deleteLake(props.row.id)"
+              >
                 <feather-icon
                   icon="TrashIcon"
                   class="mr-50"
@@ -190,20 +196,14 @@
         </div>
       </template>
     </vue-good-table>
-
-    <!-- <template #code>
-      {{ codeBasic }}
-    </template> -->
   </b-card-code>
 </template>
 
 <script>
 import BCardCode from '@core/components/b-card-code/BCardCode.vue'
-// Notification
 
 import {
   BAvatar,
-  // BBadge,
   BLink,
   BPagination,
   BFormGroup,
@@ -211,17 +211,20 @@ import {
   BFormSelect,
   BDropdown,
   BDropdownItem,
+  BButton,
 } from 'bootstrap-vue'
 import { VueGoodTable } from 'vue-good-table'
 import store from '@/store/index'
-// import { codeBasic } from '../../table/vue-good-table/code'
+import {
+  computed,
+  onBeforeMount,
+} from '@vue/composition-api'
 
 export default {
   components: {
     BCardCode,
     VueGoodTable,
     BAvatar,
-    // BBadge,
     BLink,
     BPagination,
     BFormGroup,
@@ -229,90 +232,89 @@ export default {
     BFormSelect,
     BDropdown,
     BDropdownItem,
-  },
-  data() {
-    return {
-      pageLength: 3,
-      dir: false,
-      // codeBasic,
-      columns: [
-        {
-          label: 'Name',
-          field: 'fullName',
-        },
-        {
-          label: 'Address',
-          field: 'address',
-        },
-        {
-          label: 'Owner',
-          field: 'owner',
-        },
-        {
-          label: 'Fishes',
-          field: 'fishes',
-        },
-        {
-          label: 'Fishing type',
-          field: 'fishingType',
-        },
-        {
-          label: 'X coordinate geo',
-          field: 'geoX',
-        },
-        {
-          label: 'Y coordinate geo',
-          field: 'geoY',
-        },
-        {
-          label: 'Action',
-          field: 'action',
-        },
-      ],
-      rows: [],
-      searchTerm: '',
-      // status: [{
-      //   1: 'fisher',
-      //   2: 'admin',
-      //   3: 'owner',
-      // },
-      // {
-      //   1: 'light-primary',
-      //   2: 'light-success',
-      //   3: 'light-danger',
-      // }],
-    }
-  },
-  computed: {
-    direction() {
-      if (store.state.appConfig.isRTL) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.dir = true
-        return this.dir
-      }
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.dir = false
-      return this.dir
-    },
-    getLakes() {
-      return store.getters.updateLakes
-    },
-    getUsers() {
-      return store.getters.updateUsers
-    },
-  },
-  beforeMount() {
-    store.dispatch('lakes/fetchLakes')
+    BButton,
   },
   setup() {
+    const pageLength = 3
+    let dir = false
+    const columns = [
+      {
+        label: 'Name',
+        field: 'fullName',
+      },
+      {
+        label: 'Address',
+        field: 'address',
+      },
+      {
+        label: 'Owner',
+        field: 'owner',
+      },
+      {
+        label: 'Fishes',
+        field: 'fishes',
+      },
+      {
+        label: 'Fishing type',
+        field: 'fishingType',
+      },
+      {
+        label: 'X coordinate geo',
+        field: 'geoX',
+      },
+      {
+        label: 'Y coordinate geo',
+        field: 'geoY',
+      },
+      {
+        label: 'Action',
+        field: 'action',
+      },
+    ]
+
+    const rows = []
+    const searchTerm = ''
+
+    const direction = computed(() => {
+      if (store.state.appConfig.isRTL) {
+        dir = true
+        return dir
+      }
+      dir = false
+      return dir
+    })
+
+    const getLakes = computed(() => store.getters.updateLakes)
+
+    onBeforeMount(() => {
+      store.dispatch('lakes/fetchLakes')
+    })
+
     const { lakes } = store.state
 
-    const getFullName = user => `${user?.first_name || ''} ${user?.last_name || ''}`
+    const getFullName = user => `${user?.first_name} ${user?.last_name}`
+
+    const deleteLake = id => store.dispatch('lakes/deleteLake', id)
+      .then(() => store.dispatch('lakes/fetchLakes'))
 
     return {
       lakes,
       getFullName,
+      deleteLake,
+      direction,
+      getLakes,
+      pageLength,
+      dir,
+      columns,
+      rows,
+      searchTerm,
     }
   },
 }
 </script>
+
+<style lang="scss">
+@import '@core/scss/vue/libs/vue-select.scss';
+@import '@core/scss/vue/libs/quill.scss';
+@import '@core/scss/vue/pages/page-blog.scss';
+</style>

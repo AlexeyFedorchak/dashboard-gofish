@@ -1,7 +1,7 @@
 export default [
-  // {
-  //   header: 'Charts & Maps',
-  // },
+  {
+    header: 'Charts & Maps',
+  },
   // {
   //   title: 'Charts',
   //   icon: 'PieChartIcon',
@@ -22,9 +22,9 @@ export default [
   //     },
   //   ],
   // },
-  // {
-  //   title: 'Leaflet',
-  //   route: 'maps-leaflet',
-  //   icon: 'MapIcon',
-  // },
+  {
+    title: 'Leaflet',
+    route: 'maps-leaflet',
+    icon: 'MapIcon',
+  },
 ]

@@ -35,6 +35,7 @@
               <b-button
                 variant="outline-danger"
                 class="ml-1"
+                @click="deleteUser()"
               >
                 Delete
               </b-button>
@@ -158,6 +159,8 @@
 import {
   BCard, BButton, BAvatar, BRow, BCol,
 } from 'bootstrap-vue'
+import router from '@/router'
+import store from '@/store'
 import { avatarText } from '@core/utils/filter'
 import useUsersList from '../users-list/useUsersList'
 
@@ -176,10 +179,18 @@ export default {
 
     const fullName = user => `${user?.first_name} ${user?.last_name}` || ''
 
+    const deleteUser = () => {
+      store.dispatch('user/deleteUser', router.currentRoute.params.id)
+        .then(() => {
+          router.push('/users')
+        })
+    }
+
     return {
       fullName,
       avatarText,
       resolveUserRoleVariant,
+      deleteUser,
     }
   },
 }

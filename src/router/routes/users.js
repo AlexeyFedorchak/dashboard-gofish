@@ -27,4 +27,32 @@ export default [
       ],
     },
   },
+  {
+    path: '/lake/create',
+    name: 'lake-create',
+    component: () => import('@/views/apps/lake/lake-create/LakeCreate.vue'),
+    meta: {
+      pageTitle: 'Create Lake',
+      breadcrumb: [
+        {
+          text: 'Lakes',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/lake/update/:slug',
+    name: 'lake-update',
+    component: () => import('@/views/apps/lake/lake-edit/LakeEdit.vue'),
+    meta: {
+      pageTitle: 'Edit Lake',
+      breadcrumb: [
+        {
+          text: 'Lakes',
+          active: true,
+        },
+      ],
+    },
+  },
 ]

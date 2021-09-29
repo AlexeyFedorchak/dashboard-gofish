@@ -31,6 +31,12 @@ tagVariant
 
 */
 import usersAndLakes from './users-and-lakes'
+// import appsAndPages from './apps-and-pages'
+// import chartsAndMaps from './charts-and-maps'
+// import dashboard from './dashboard'
+// import formsAndTable from './forms-and-table'
+// import others from './others'
+// import uiElements from './ui-elements'
 
 // Array of sections
 export default [...usersAndLakes]

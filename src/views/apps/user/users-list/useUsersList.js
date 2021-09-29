@@ -15,14 +15,7 @@ export default function useUsersList() {
   // Table Handlers
   const tableColumns = [
     { key: 'user', sortable: true },
-    // { key: 'email', sortable: true },
     { key: 'role', sortable: true },
-    // {
-    //   key: 'currentPlan',
-    //   label: 'Plan',
-    //   formatter: title,
-    //   sortable: true,
-    // },
     { key: 'status', sortable: true },
     { key: 'actions' },
   ]
@@ -89,24 +82,19 @@ export default function useUsersList() {
 
   const resolveUserRoleVariant = role => {
     if (role === 'fisher') return 'primary'
-    // if (role === 'author') return 'warning'
     if (role === 'owner') return 'success'
-    // if (role === 'editor') return 'info'
     if (role === 'admin') return 'danger'
     return 'primary'
   }
 
   const resolveUserRoleIcon = role => {
     if (role === 'fisher') return 'UserIcon'
-    // if (role === 'author') return 'SettingsIcon'
     if (role === 'owner') return 'DatabaseIcon'
-    // if (role === 'editor') return 'Edit2Icon'
     if (role === 'admin') return 'ServerIcon'
     return 'UserIcon'
   }
 
   const resolveUserStatusVariant = status => {
-    if (status === 'pending') return 'warning'
     if (status === 'active') return 'success'
     if (status === 'inactive') return 'secondary'
     return 'primary'

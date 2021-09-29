@@ -6,15 +6,15 @@
       <template #aside>
         <b-avatar
           ref="previewEl"
-          :src="userData.avatar"
-          :text="avatarText(userData.fullName)"
-          :variant="`light-${resolveUserRoleVariant(userData.role)}`"
+          :src="newData.photo_path"
+          :text="avatarText(fullName(userData))"
+          :variant="`light-${resolveUserRoleVariant(newData.roles.find(e => e).name)}`"
           size="90px"
           rounded
         />
       </template>
       <h4 class="mb-1">
-        {{ userData.fullName }}
+        {{ fullName(userData) }}
       </h4>
       <div class="d-flex flex-wrap">
         <b-button
@@ -26,6 +26,7 @@
             type="file"
             class="d-none"
             @input="inputImageRenderer"
+            @change="sendPhoto"
           >
           <span class="d-none d-sm-inline">Update</span>
           <feather-icon
@@ -36,6 +37,7 @@
         <b-button
           variant="outline-secondary"
           class="ml-1"
+          @click="deleteUser()"
         >
           <span class="d-none d-sm-inline">Remove</span>
           <feather-icon
@@ -56,45 +58,61 @@
           md="4"
         >
           <b-form-group
-            label="Username"
-            label-for="username"
+            label="First Name"
+            label-for="first_name"
           >
             <b-form-input
-              id="username"
-              v-model="userData.username"
+              id="first_name"
+              v-model="newData.first_name"
             />
           </b-form-group>
         </b-col>
 
-        <!-- Field: Full Name -->
+        <!-- Field: Last Name -->
         <b-col
           cols="12"
           md="4"
         >
           <b-form-group
-            label="Name"
-            label-for="full-name"
+            label="Last Name"
+            label-for="last_name"
           >
             <b-form-input
-              id="full-name"
-              v-model="userData.fullName"
+              id="last_name"
+              v-model="newData.last_name"
             />
           </b-form-group>
         </b-col>
 
-        <!-- Field: Email -->
+        <!-- Field: Nick Name -->
         <b-col
           cols="12"
           md="4"
         >
           <b-form-group
-            label="Email"
-            label-for="email"
+            label="Nick Name"
+            label-for="nick_name"
           >
             <b-form-input
-              id="email"
-              v-model="userData.email"
-              type="email"
+              id="nick_name"
+              v-model="newData.nick_name"
+            />
+          </b-form-group>
+        </b-col>
+
+        <!-- Field: Phone -->
+        <b-col
+          cols="12"
+          md="4"
+        >
+          <b-form-group
+            label="Phone"
+            label-for="phone"
+          >
+            <b-form-input
+              id="phone"
+              v-model="newData.phone"
+              type="tel"
             />
           </b-form-group>
         </b-col>
@@ -109,12 +127,12 @@
             label-for="user-status"
           >
             <v-select
-              v-model="userData.status"
+              v-model="newData.is_activated"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="statusOptions"
-              :reduce="val => val.value"
+              :reduce="val => val.id"
               :clearable="false"
-              input-id="user-status"
+              input-id="user_status"
             />
           </b-form-group>
         </b-col>
@@ -126,31 +144,15 @@
         >
           <b-form-group
             label="User Role"
-            label-for="user-role"
+            label-for="user_role"
           >
             <v-select
-              v-model="userData.role"
+              v-model="newData.role"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               :options="roleOptions"
               :reduce="val => val.value"
               :clearable="false"
-              input-id="user-role"
-            />
-          </b-form-group>
-        </b-col>
-
-        <!-- Field: Email -->
-        <b-col
-          cols="12"
-          md="4"
-        >
-          <b-form-group
-            label="Company"
-            label-for="company"
-          >
-            <b-form-input
-              id="company"
-              v-model="userData.company"
+              input-id="user_role"
             />
           </b-form-group>
         </b-col>
@@ -158,40 +160,11 @@
       </b-row>
     </b-form>
 
-    <!-- PERMISSION TABLE -->
-    <b-card
-      no-body
-      class="border mt-1"
-    >
-      <b-card-header class="p-1">
-        <b-card-title class="font-medium-2">
-          <feather-icon
-            icon="LockIcon"
-            size="18"
-          />
-          <span class="align-middle ml-50">Permission</span>
-        </b-card-title>
-      </b-card-header>
-      <b-table
-        striped
-        responsive
-        class="mb-0"
-        :items="permissionsData"
-      >
-        <template #cell(module)="data">
-          {{ data.value }}
-        </template>
-        <template #cell()="data">
-          <b-form-checkbox :checked="data.value" />
-        </template>
-      </b-table>
-    </b-card>
-
-    <!-- Action Buttons -->
     <b-button
       variant="primary"
       class="mb-1 mb-sm-0 mr-0 mr-sm-1"
       :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+      @click="updateUser()"
     >
       Save Changes
     </b-button>
@@ -199,6 +172,7 @@
       variant="outline-secondary"
       type="reset"
       :block="$store.getters['app/currentBreakPoint'] === 'xs'"
+      @click="resetChange()"
     >
       Reset
     </b-button>
@@ -207,12 +181,21 @@
 
 <script>
 import {
-  BButton, BMedia, BAvatar, BRow, BCol, BFormGroup, BFormInput, BForm, BTable, BCard, BCardHeader, BCardTitle, BFormCheckbox,
+  BButton,
+  BMedia,
+  BAvatar,
+  BRow,
+  BCol,
+  BFormGroup,
+  BFormInput,
+  BForm,
 } from 'bootstrap-vue'
+import router from '@/router'
 import { avatarText } from '@core/utils/filter'
 import vSelect from 'vue-select'
 import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
 import { ref } from '@vue/composition-api'
+import store from '@/store'
 import useUsersList from '../users-list/useUsersList'
 
 export default {
@@ -225,11 +208,6 @@ export default {
     BFormGroup,
     BFormInput,
     BForm,
-    BTable,
-    BCard,
-    BCardHeader,
-    BCardTitle,
-    BFormCheckbox,
     vSelect,
   },
   props: {
@@ -238,21 +216,18 @@ export default {
       required: true,
     },
   },
-  setup(props) {
+  setup({ userData }) {
     const { resolveUserRoleVariant } = useUsersList()
 
     const roleOptions = [
-      { label: 'Admin', value: 'admin' },
-      { label: 'Author', value: 'author' },
-      { label: 'Editor', value: 'editor' },
-      { label: 'Maintainer', value: 'maintainer' },
-      { label: 'Subscriber', value: 'subscriber' },
+      { label: 'Admin', value: 'admin', id: 1 },
+      { label: 'Owner', value: 'owner', id: 2 },
+      { label: 'Fisher', value: 'Fisher', id: 3 },
     ]
 
     const statusOptions = [
-      { label: 'Pending', value: 'pending' },
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
+      { label: 'Active', value: 'active', id: 1 },
+      { label: 'Inactive', value: 'inactive', id: 0 },
     ]
 
     const permissionsData = [
@@ -264,43 +239,67 @@ export default {
         delete: false,
       },
       {
-        module: 'Staff',
+        module: 'Owner',
         read: false,
         write: true,
         create: false,
         delete: false,
       },
       {
-        module: 'Author',
+        module: 'Fisher',
         read: true,
         write: false,
         create: true,
         delete: false,
       },
-      {
-        module: 'Contributor',
-        read: false,
-        write: false,
-        create: false,
-        delete: false,
-      },
-      {
-        module: 'User',
-        read: false,
-        write: false,
-        create: false,
-        delete: true,
-      },
     ]
 
-    // ? Demo Purpose => Update image on click of update
     const refInputEl = ref(null)
     const previewEl = ref(null)
 
+    const newData = {
+      ...userData,
+      oldRole: userData.roles.find(e => e).name,
+    }
+
     const { inputImageRenderer } = useInputImageRenderer(refInputEl, base64 => {
-      // eslint-disable-next-line no-param-reassign
-      props.userData.avatar = base64
+      newData.photo_path = base64
     })
+
+    const sendPhoto = event => {
+      const [image] = event.target.files
+      newData.image = image
+    }
+
+    const fullName = user => `${user.first_name} ${user.last_name}`
+
+    const deleteUser = () => {
+      store.dispatch('user/deleteUser', router.currentRoute.params.id)
+        .then(() => {
+          router.push('/users')
+        })
+    }
+
+    const updateUser = () => {
+      delete newData.photo_path
+      store.dispatch('user/updateUser', newData)
+        .then(() => {
+          router.push(`/apps/users/view/${newData.id}`)
+        })
+    }
+
+    const resetChange = () => {
+      newData.first_name = userData.first_name
+      newData.last_name = userData.last_name
+      newData.nick_name = userData.nick_name
+      newData.phone = userData.phone
+      newData.is_activated = userData.is_activated
+      newData.photo_path = userData.photo_path
+
+      delete newData.role
+      delete newData.image
+      delete newData.oldRole
+    }
 
     return {
       resolveUserRoleVariant,
@@ -308,8 +307,12 @@ export default {
       roleOptions,
       statusOptions,
       permissionsData,
-
-      //  ? Demo - Update Image on click of update button
+      deleteUser,
+      fullName,
+      newData,
+      resetChange,
+      updateUser,
+      sendPhoto,
       refInputEl,
       previewEl,
       inputImageRenderer,

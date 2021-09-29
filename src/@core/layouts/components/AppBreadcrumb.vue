@@ -39,7 +39,7 @@
     </b-col>
 
     <!-- Content Right -->
-    <b-col
+    <!-- <b-col
       class="content-header-right text-md-right d-md-block d-none mb-1"
       md="3"
       cols="12"
@@ -93,13 +93,19 @@
           <span class="align-middle ml-50">Calendar</span>
         </b-dropdown-item>
       </b-dropdown>
-    </b-col>
+    </b-col> -->
   </b-row>
 </template>
 
 <script>
 import {
-  BBreadcrumb, BBreadcrumbItem, BRow, BCol, BDropdown, BDropdownItem, BButton,
+  BBreadcrumb,
+  BBreadcrumbItem,
+  BRow,
+  BCol,
+  // BDropdown,
+  // BDropdownItem,
+  // BButton,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 
@@ -112,9 +118,9 @@ export default {
     BBreadcrumbItem,
     BRow,
     BCol,
-    BDropdown,
-    BDropdownItem,
-    BButton,
+    // BDropdown,
+    // BDropdownItem,
+    // BButton,
   },
 }
 </script>

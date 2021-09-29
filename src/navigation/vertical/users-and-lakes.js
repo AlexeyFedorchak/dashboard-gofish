@@ -10,6 +10,6 @@ export default [
   {
     title: 'Lakes',
     route: 'lakes',
-    icon: 'UmbrellaIcon',
+    icon: 'AnchorIcon',
   },
 ]

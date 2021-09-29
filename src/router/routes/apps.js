@@ -221,4 +221,14 @@ export default [
     name: 'apps-invoice-edit',
     component: () => import('@/views/apps/invoice/invoice-edit/InvoiceEdit.vue'),
   },
+
+  // *===============================================---*
+  // *--------- USER ---- ---------------------------------------*
+  // *===============================================---*
+
+  {
+    path: '/apps/lakes/view/:slug',
+    name: 'apps-lakes-view',
+    component: () => import('@/views/apps/lake/lake-view/LakeView.vue'),
+  },
 ]

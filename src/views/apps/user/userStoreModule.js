@@ -14,13 +14,14 @@ export default {
       const res = await entityRequests.users.currentUser(id)
       return res
     },
-    // addUser(ctx, userData) {
-    //   return new Promise((resolve, reject) => {
-    //     axios
-    //       .post(`${VUE_APP_API_URL}/users`, { user: userData })
-    //       .then(response => resolve(response))
-    //       .catch(error => reject(error))
-    //   })
-    // },
+    async addUser(ctx, userData) {
+      await entityRequests.users.addUser(userData)
+    },
+    async deleteUser(ctx, id) {
+      await entityRequests.users.deleteUser(id)
+    },
+    async updateUser(ctx, userData) {
+      await entityRequests.users.updateUser(userData)
+    },
   },
 }

@@ -1,6 +1,5 @@
 import { ref, watch, computed } from '@vue/composition-api'
 import store from '@/store'
-// import { title } from '@core/utils/filter'
 
 // Notification
 import { useToast } from 'vue-toastification/composition'
@@ -15,14 +14,7 @@ export default function useLakesList() {
   // Table Handlers
   const tableColumns = [
     { key: 'lake', sortable: true },
-    // { key: 'email', sortable: true },
     { key: 'role', sortable: true },
-    // {
-    //   key: 'currentPlan',
-    //   label: 'Plan',
-    //   formatter: title,
-    //   sortable: true,
-    // },
     { key: 'status', sortable: true },
     { key: 'actions' },
   ]
@@ -55,8 +47,7 @@ export default function useLakesList() {
   })
 
   const fetchLakes = (ctx, callback) => {
-    store
-      .dispatch('lakes/fetchLakes')
+    store.dispatch('lakes/fetchLakes')
       .then(response => {
         const { lakes } = response
         callback(lakes)
@@ -72,39 +63,7 @@ export default function useLakesList() {
           },
         })
       })
-
-    // const res = await store.dispatch('lakes/fetchLakes')
-    // return res
   }
-
-  // *===============================================---*
-  // *--------- UI ---------------------------------------*
-  // *===============================================---*
-
-  // const resolveLakesRoleVariant = role => {
-  //   if (role === 'fisher') return 'primary'
-  //   // if (role === 'author') return 'warning'
-  //   if (role === 'owner') return 'success'
-  //   // if (role === 'editor') return 'info'
-  //   if (role === 'admin') return 'danger'
-  //   return 'primary'
-  // }
-
-  // const resolveLakesRoleIcon = role => {
-  //   if (role === 'fisher') return 'LakesIcon'
-  //   // if (role === 'author') return 'SettingsIcon'
-  //   if (role === 'owner') return 'DatabaseIcon'
-  //   // if (role === 'editor') return 'Edit2Icon'
-  //   if (role === 'admin') return 'ServerIcon'
-  //   return 'LakesIcon'
-  // }
-
-  // const resolveLakesStatusVariant = status => {
-  //   if (status === 'pending') return 'warning'
-  //   if (status === 'active') return 'success'
-  //   if (status === 'inactive') return 'secondary'
-  //   return 'primary'
-  // }
 
   return {
     fetchLakes,
